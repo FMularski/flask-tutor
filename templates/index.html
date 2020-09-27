@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Flask app</title>
+</head>
+<body>
+    <h1>Hello Flask!</h1>
+    <p>{{name}}</p>
+    <p>{{last_name}}</p>
+
+    <ul>
+        {% for letter in letters %}
+        <li>{{letter}}</li>
+        {% endfor %}
+    </ul>
+
+</body>
+</html>
