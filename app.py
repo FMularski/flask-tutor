@@ -1,7 +1,10 @@
-from flask import Flask, redirect, url_for, render_template, request
+from flask import Flask, redirect, url_for, render_template, request, session
+from datetime import timedelta
+
 
 app = Flask(__name__)
-
+app.secret_key = 'secret'
+app.permanent_session_lifetime = timedelta(days=5)  # setting up permanent session (5 days period)
 
 # @app.route('/<name>')
 # def index(name):
@@ -32,15 +35,30 @@ def about():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'GET':
+        if 'user' in session:
+            return redirect(url_for('user'))
+
         return render_template('login.html')
     else:
+        session.permanent = True    # turning on permanent sessions
         username = request.form['username']
-        return redirect(url_for('user', usr=username))
+        session['user'] = username
+        return redirect(url_for('user'))
 
 
-@app.route('/<usr>')
-def user(usr):
-    return f'<h1>{usr}</h1>'
+@app.route('/logout')
+def logout():
+    session.pop('user', None)   # removing data from session
+    return redirect(url_for('login'))
+
+
+@app.route('/user')
+def user():
+    if 'user' in session:
+        username = session['user']
+        return f"<h1>{username}</h1>"
+    else:
+        return redirect(url_for('login'))
 
 
 if __name__ == '__main__':
