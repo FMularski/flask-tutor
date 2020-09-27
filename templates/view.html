@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block title %}View{% endblock %}
+
+{% block content %}
+    {% for record in db_records %}
+        <p>ID: {{record._id}}</p>
+        <p>Name: {{record.name}}</p>
+        <p>Email: {{record.email}}</p>
+        <br/>
+    {% endfor %}
+{% endblock %}
