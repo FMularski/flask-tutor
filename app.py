@@ -1,9 +1,11 @@
 from flask import Flask, redirect, url_for, render_template, request, session, flash
 from datetime import timedelta
 from flask_sqlalchemy import SQLAlchemy
+from second import second
 
 
 app = Flask(__name__)
+app.register_blueprint(second, url_prefix='/second')  # register blueprint, prefix is 'door' to blueprint in browser
 app.secret_key = 'secret'
 app.permanent_session_lifetime = timedelta(days=5)  # setting up permanent session (5 days period)
 
