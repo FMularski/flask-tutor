@@ -1,4 +1,4 @@
-from flask import Flask, redirect, url_for, render_template, request, session
+from flask import Flask, redirect, url_for, render_template, request, session, flash
 from datetime import timedelta
 
 
@@ -36,6 +36,7 @@ def about():
 def login():
     if request.method == 'GET':
         if 'user' in session:
+            flash('Already logged in.', 'info')
             return redirect(url_for('user'))
 
         return render_template('login.html')
@@ -43,12 +44,14 @@ def login():
         session.permanent = True    # turning on permanent sessions
         username = request.form['username']
         session['user'] = username
+        flash('Logged in successfully.', 'info')
         return redirect(url_for('user'))
 
 
 @app.route('/logout')
 def logout():
-    session.pop('user', None)   # removing data from session
+    session.pop('user', None)  # removing data from session
+    flash('Successfully logged out.', 'info')
     return redirect(url_for('login'))
 
 
@@ -56,8 +59,9 @@ def logout():
 def user():
     if 'user' in session:
         username = session['user']
-        return f"<h1>{username}</h1>"
+        return render_template('user.html', user=username)
     else:
+        flash('You are not logged in.', 'info')
         return redirect(url_for('login'))
 
 
